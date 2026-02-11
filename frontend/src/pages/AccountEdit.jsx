@@ -14,11 +14,9 @@ export default function AccountEdit() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
+    <div className="min-h-screen text-gray-100 p-6">
       <div className="max-w-xl mx-auto space-y-6">
-        <h1 className="text-2xl font-semibold">
-          Edit account
-        </h1>
+        <h1 className="text-2xl font-semibold">Edit account</h1>
 
         <AccountForm
           initialValues={account}

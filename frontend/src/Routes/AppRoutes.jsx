@@ -1,11 +1,11 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import Register from "../pages/Register";
-import Vault from "../pages/Vault";
+import { Route, Routes } from "react-router-dom";
+import ProtectedLayout from "../components/layout/ProtectedLayout";
 import AccountCreate from "../pages/AccountCreate";
 import AccountEdit from "../pages/AccountEdit";
+import Home from "../pages/Home";
 import NotFound from "../pages/NotFound";
-import ProtectedLayout from "../components/layout/ProtectedLayout";
+import Register from "../pages/Register";
+import Vault from "../pages/Vault";
 
 export default function AppRoutes() {
   return (

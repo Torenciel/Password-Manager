@@ -1,19 +1,13 @@
-import express from 'express'
-const router = express.Router()
+import express from "express";
+import { validateRegister, validateLogin, validateResetPasswordRequest } from "../middleware/validation.middleware.js";
+import { register, verifyEmail, login, resetPasswordRequest, resetPassword } from "../controllers/auth.controller.js";
 
-//créer un nouvel utilisateurs
-router.post('/register')
+const router = express.Router();
 
-//vérification de la validité de l'email de l'utilisateur pour confirmer la création de compte
-router.get('/verify')
+router.post("/register", validateRegister, register);
+router.post('/login', validateLogin , login)
+router.get("/verify", verifyEmail)
+router.post('/reset-password-request',  validateResetPasswordRequest,resetPasswordRequest)
+router.post('/reset-password', resetPassword)
 
-//connexion de l'utilisateur
-router.post('/login')
-
-//demande de mis a jour du mot de passe
-router.post('/reset-password-request')
-
-//mise a jour du mot de passe
-router.post('/reset-password')
-
-export default router
+export default router;

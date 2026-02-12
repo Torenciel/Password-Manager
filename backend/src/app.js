@@ -8,6 +8,6 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/auth', authRoutes );
-app.use('api/passwords', passRoutes)
+app.use('/api/passwords', passRoutes)
 
 export default app

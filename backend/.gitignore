@@ -1,46 +1,45 @@
-tu peux mettre ca dans le gitignore # =========================
-# Dependencies
-# =========================
+Dependencies
+=========================
 node_modules/
 bower_components/
 jspm_packages/
 
-# =========================
-# Logs
-# =========================
+=========================
+Logs
+=========================
 logs/
-*.log
-npm-debug.log*
+.log
+npm-debug.log
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# =========================
-# Runtime / process
-# =========================
+=========================
+Runtime / process
+=========================
 pids
 *.pid
 *.seed
-*.pid.lock
+.pid.lock
 
-# =========================
-# Environment variables
-# =========================
+=========================
+Environment variables
+=========================
 .env
-.env.*
+.env.
 !.env.example
 
-# =========================
-# Build / output
-# =========================
+=========================
+Build / output
+=========================
 dist/
 build/
 coverage/
 .nyc_output/
 
-# =========================
-# Cache
-# =========================
+=========================
+Cache
+=========================
 .cache/
 .parcel-cache/
 .eslintcache
@@ -51,27 +50,29 @@ coverage/
 .yarn/install-state.gz
 .pnp.*
 
-# =========================
-# TypeScript
-# =========================
+=========================
+TypeScript
+=========================
 *.tsbuildinfo
 
-# =========================
-# OS / Editor
-# =========================
+=========================
+OS / Editor
+=========================
 .DS_Store
 .vscode/
 .idea/
 *.iml
-*.sublime*
+.sublime
 *.swp
 *.tmp
 
-# =========================
-# Misc
-# =========================
+=========================
+Misc
+=========================
 *.tgz
 .node_repl_history
 .tern-port
 .serverless/
 .dynamodb/
+
+

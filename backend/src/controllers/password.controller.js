@@ -1,6 +1,10 @@
-import * as model from "../models/password.model.js";
 import "dotenv/config";
-import { getUserKey, encryptPassword, decryptPassword } from "../utils/encryption.util.js";
+import * as model from "../models/password.model.js";
+import {
+  decryptPassword,
+  encryptPassword,
+  getUserKey,
+} from "../utils/encryption.util.js";
 
 // création du password
 
@@ -30,7 +34,7 @@ export const create = async (req, res) => {
     // Chiffrement du mot de passe
     const { encrypted, initialisation_vector } = encryptPassword(
       password_hash,
-      masterKey
+      masterKey,
     );
     console.log("password_hash:", password_hash);
     console.log("masterKey:", masterKey);
@@ -77,16 +81,23 @@ export const getAll = async (req, res) => {
       }
 
       try {
-        const decrypted = decryptPassword(entry.password_hash, entry.iv, masterkey);
+        const decrypted = decryptPassword(
+          entry.password_hash,
+          entry.iv,
+          masterkey,
+        );
         return { ...entry, password: decrypted };
       } catch (error) {
-        console.error("Erreur décryptage pour l'entrée ID", entry.id, error.message);
+        console.error(
+          "Erreur décryptage pour l'entrée ID",
+          entry.id,
+          error.message,
+        );
         return { ...entry, password: null };
       }
     });
 
     res.json(decryptedEntries);
-
   } catch (error) {
     console.error("Erreur lors de la récupération des données:", error.message);
     res
@@ -117,18 +128,17 @@ export const getById = async (req, res) => {
     const decryptedPassword = decryptPassword(
       entry.password_hash,
       entry.iv,
-      masterkey
-    )
+      masterkey,
+    );
 
     res.json({
       ...entry,
-      password:decryptedPassword
+      password: decryptedPassword,
     });
-
   } catch (error) {
     console.error(
       "Erreur lors de la récupération des données par id :",
-      error.message
+      error.message,
     );
     res.status(500).json({
       message: "Erreur serveur lors de la récupération des données par id",
@@ -177,7 +187,7 @@ export const updateById = async (req, res) => {
   } catch (error) {
     console.error(
       "Erreur lors de la mise à jour des données par id :",
-      error.message
+      error.message,
     );
     res.status(500).json({
       message: "Erreur serveur lors de la mise a jour des données par id",

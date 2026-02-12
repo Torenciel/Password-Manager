@@ -16,6 +16,7 @@ import {
   sendVerificationMail,
   sendResetPasswordEmail,
 } from "../config/mailer.js";
+import { removeUserKey, storeUserKey } from "../utils/encryption.util.js";
 
 //register
 
@@ -75,10 +76,12 @@ export const login = async (req, res) => {
         .json({ message: "Email ou mot de passe incorrect" });
     }
 
+    storeUserKey(user.id, password);
+
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN },
+      { expiresIn: process.env.JWT_EXPIRES_IN }
     );
 
     return res.status(200).json({ token });
@@ -126,6 +129,17 @@ export const resetPassword = async (req, res) => {
     await db.query("UPDATE users SET reset_token=NULL WHERE id = ?", [user.id]);
 
     res.status(200).json({ message: "Mot de pass renitialiser avec success" });
+  } catch (error) {
+    res.status(500).json({ message: "erreur server", error: error.message });
+  }
+};
+
+export const logout = (req, res) => {
+  try {
+    const user_id = req.user.id;
+    removeUserKey(user_id);
+
+    res.json({ message: "déconnexion réussie" });
   } catch (error) {
     res.status(500).json({ message: "erreur server", error: error.message });
   }

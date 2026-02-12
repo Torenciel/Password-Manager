@@ -55,3 +55,24 @@ export const validateResetPasswordRequest = (req, res, next) => {
       .json({ message: error.issues.map((err) => err.message).join(", ") });
   }
 };
+
+
+//  validation passwords dans la vault
+
+export const validatePassword = (req, res, next) => {
+  const schema = z.object({
+    service_name: z.string().min(3),
+    login: z.string(),
+    password_hash: z.string(),
+  });
+
+  try {
+    schema.parse(req.body);
+
+    next();
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: error.issues.map((err) => err.message).join(", ") });
+  }
+};

@@ -1,8 +1,25 @@
+import { useNavigate } from "react-router-dom";
+import { apiFetch } from "../services/api";
+
 import AccountForm from "../components/accounts/AccountForm";
 
 export default function AccountCreate() {
-  function handleCreate(data) {
-    console.log("Create", data);
+  const navigate = useNavigate();
+  async function handleCreate(data) {
+    try {
+      await apiFetch("/api/passwords", {
+        method: "POST",
+        body: JSON.stringify({
+          service_name: data.serviceName,
+          login: data.username,
+          password_hash: data.password,
+        }),
+      });
+
+      navigate("/vault");
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (

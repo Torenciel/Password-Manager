@@ -14,9 +14,9 @@ export default function AppRoutes() {
       <Route path="/register" element={<Register />} />
 
       <Route element={<ProtectedLayout />}>
-        <Route path="/vault" element={<Vault />} />
         <Route path="/accounts/new" element={<AccountCreate />} />
         <Route path="/accounts/:id/edit" element={<AccountEdit />} />
+        <Route path="/vault" element={<Vault />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

@@ -1,134 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { apiFetch } from "../services/api";
 
 import { FaRegCopy } from "react-icons/fa";
-import { MdModeEdit } from "react-icons/md";
+import { MdDeleteForever, MdModeEdit } from "react-icons/md";
 
 export default function Vault() {
   const [openId, setOpenId] = useState(null);
-
-  const accounts = [
-    {
-      id: 1,
-      serviceName: "GitHub",
-      username: "user@email.com",
-      password: "••••••••",
-    },
-    {
-      id: 2,
-      serviceName: "Google",
-      username: "user@gmail.com",
-      password: "••••••••",
-    },
-    {
-      id: 3,
-      serviceName: "GitLab",
-      username: "user@gitlab.com",
-      password: "••••••••",
-    },
-    {
-      id: 4,
-      serviceName: "Bitbucket",
-      username: "user@bitbucket.org",
-      password: "••••••••",
-    },
-    {
-      id: 5,
-      serviceName: "Twitter",
-      username: "user@twitter.com",
-      password: "••••••••",
-    },
-    {
-      id: 6,
-      serviceName: "LinkedIn",
-      username: "user@linkedin.com",
-      password: "••••••••",
-    },
-    {
-      id: 7,
-      serviceName: "Facebook",
-      username: "user@facebook.com",
-      password: "••••••••",
-    },
-    {
-      id: 8,
-      serviceName: "Instagram",
-      username: "user@instagram.com",
-      password: "••••••••",
-    },
-    {
-      id: 9,
-      serviceName: "Amazon",
-      username: "user@amazon.com",
-      password: "••••••••",
-    },
-    {
-      id: 10,
-      serviceName: "Netflix",
-      username: "user@netflix.com",
-      password: "••••••••",
-    },
-    {
-      id: 11,
-      serviceName: "Spotify",
-      username: "user@spotify.com",
-      password: "••••••••",
-    },
-    {
-      id: 12,
-      serviceName: "Dropbox",
-      username: "user@dropbox.com",
-      password: "••••••••",
-    },
-    {
-      id: 13,
-      serviceName: "Slack",
-      username: "user@slack.com",
-      password: "••••••••",
-    },
-    {
-      id: 14,
-      serviceName: "Discord",
-      username: "user@discord.com",
-      password: "••••••••",
-    },
-    {
-      id: 15,
-      serviceName: "Reddit",
-      username: "user@reddit.com",
-      password: "••••••••",
-    },
-    {
-      id: 16,
-      serviceName: "Notion",
-      username: "user@notion.so",
-      password: "••••••••",
-    },
-    {
-      id: 17,
-      serviceName: "Figma",
-      username: "user@figma.com",
-      password: "••••••••",
-    },
-    {
-      id: 18,
-      serviceName: "Trello",
-      username: "user@trello.com",
-      password: "••••••••",
-    },
-    {
-      id: 19,
-      serviceName: "PayPal",
-      username: "user@paypal.com",
-      password: "••••••••",
-    },
-    {
-      id: 20,
-      serviceName: "Microsoft",
-      username: "user@outlook.com",
-      password: "••••••••",
-    },
-  ];
+  const [accounts, setAccounts] = useState([]);
 
   function toggleAccount(id) {
     setOpenId((prev) => (prev === id ? null : id));
@@ -137,6 +16,33 @@ export default function Vault() {
   function copyPassword(password) {
     navigator.clipboard.writeText(password);
   }
+
+  async function handleDelete(id) {
+    const confirmDelete = window.confirm("Supprimer ce compte ?");
+    if (!confirmDelete) return;
+
+    try {
+      await apiFetch(`/api/passwords/${id}`, {
+        method: "DELETE",
+      });
+
+      setAccounts((prev) => prev.filter((acc) => acc.id !== id));
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await apiFetch("/api/passwords");
+        setAccounts(data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+    load();
+  }, []);
 
   return (
     <div className="min-h-screen text-gray-100 p-6">
@@ -168,20 +74,29 @@ export default function Vault() {
                 {/* Row */}
                 <div className="flex justify-between items-center">
                   <div>
-                    <div className="font-medium">{account.serviceName}</div>
-                    <div className="text-sm text-gray-400">
-                      {account.username}
-                    </div>
+                    <div className="font-medium">{account.service_name}</div>
+                    <div className="text-sm text-gray-400">{account.login}</div>
                   </div>
 
-                  {/* Edit button */}
-                  <Link
-                    to={`/accounts/${account.id}/edit`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="text-sm px-2 py-2 rounded bg-gray-700 hover:bg-gray-600"
-                  >
-                    <MdModeEdit />
-                  </Link>
+                  <div className="flex gap-2">
+                    <Link
+                      to={`/accounts/${account.id}/edit`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-lg px-2 py-2 rounded bg-gray-700 hover:bg-gray-600"
+                    >
+                      <MdModeEdit />
+                    </Link>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(account.id);
+                      }}
+                      className="text-lg px-2 py-2 rounded bg-gray-700 hover:bg-gray-600"
+                    >
+                      <MdDeleteForever />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Expandable content */}
